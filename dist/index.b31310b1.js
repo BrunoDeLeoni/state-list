@@ -504,7 +504,34 @@ function formComponent() {
     customElements.define("form-custom", FormComponent);
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"JacNc","../state":"28XHA"}],"JacNc":[function(require,module,exports) {
+},{"../state":"28XHA","@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}],"28XHA":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "state", ()=>state
+);
+const state = {
+    data: {
+        list: []
+    },
+    listeners: [],
+    getState () {
+        return this.data;
+    },
+    setState (newState) {
+        this.data = newState;
+        for (const cb of this.listeners)cb();
+    },
+    subscribe (callback) {
+        this.listeners.push(callback);
+    },
+    addItem (item) {
+        const cs = this.getState();
+        cs.list.push(item);
+        this.setState(cs);
+    }
+};
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}],"JacNc":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -536,36 +563,7 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"28XHA":[function(require,module,exports) {
-var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "state", ()=>state
-);
-const state = {
-    data: {
-        list: []
-    },
-    listeners: [],
-    getState () {
-        return this.data;
-    },
-    setState (newState) {
-        this.data = newState;
-        for (const cb of this.listeners)cb();
-        console.log("State", this.data);
-    },
-    subscribe (callback) {
-        this.listeners.push(callback);
-    },
-    addItem (item) {
-        const cs = this.getState();
-        cs.list.push(item);
-        this.setState(cs);
-        console.log("newCS", cs);
-    }
-};
-
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"JacNc"}],"4sefP":[function(require,module,exports) {
+},{}],"4sefP":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "listComponent", ()=>listComponent
@@ -579,6 +577,7 @@ function listComponent() {
                 mode: "open"
             });
             this.render();
+            this.connectedCallBack();
         }
         //CONNECTED
         connectedCallBack() {
@@ -590,16 +589,13 @@ function listComponent() {
         render() {
             const list = _state.state.getState().list;
             console.log("List", list);
-            var div = document.createElement("div");
-            div.classList.add("root__list");
             // DIV
-            div.innerHTML = `\n            <div>\n            <h4>Nombre:</h4> \n            <ul>${list.map((item)=>{
-                return `<li>${item}</li>`;
-            }).join("")}\n            <ul/>\n            </div>\n            `;
+            this.shadow.innerHTML = `\n            <div>\n            <h4>Nombre:</h4> \n                <ul>\n                ${list.map((item)=>`<li>${item}</li>`
+            ).join("")}\n                </ul>\n            </div>\n            `;
             // STYLE
             var style = document.createElement("style");
-            style.innerHTML = `\n            .root__list{\n                margin: 0px;\n                width: 100%;\n                height: 80vh;\n            }\n            div{\n                background: #FF8282;\n                display: flex;\n                flex-direction: column;\n                align-self: center;\n                justify-content: center;\n                margin: 20px auto;\n            }\n            `;
-            this.shadow.appendChild(div);
+            style.innerHTML = `\n            div{\n                margin: 0px auto;\n                height: 70vh;\n                background: #FF8282;\n                display: flex;\n                gap: 10px;\n                padding: 10px;\n                flex-direction: column;\n                align-self: center;\n                justify-content: flex-start;\n            }\n            `;
+            // this.shadow.appendChild(div);
             this.shadow.appendChild(style);
         }
     }

@@ -11,7 +11,6 @@ const state = {
         for (const cb of this.listeners) {
             cb();
         }
-        console.log("State", this.data);
         
     },
     subscribe(callback:(any)=>any){
@@ -21,8 +20,6 @@ const state = {
         const cs = this.getState();
         cs.list.push(item);
         this.setState(cs);
-        console.log("newCS", cs);
-        
     }
 }
 

@@ -7,9 +7,10 @@ export function listComponent(){
         constructor(){
             super();
             this.render();
+            this.connectedCallBack();
         }
         //CONNECTED
-        connectedCallBack(){
+        connectedCallBack(){ 
             state.subscribe(() => {
                 this.render();
             })
@@ -19,40 +20,33 @@ export function listComponent(){
             const list = state.getState().list
             console.log("List", list);
             
-            var div = document.createElement("div");
-            div.classList.add("root__list");
-            
             // DIV
-            div.innerHTML =
+            this.shadow.innerHTML =
             `
             <div>
             <h4>Nombre:</h4> 
-            <ul>${list.map((item) => {
-                return `<li>${item}</li>`
-            })
-            .join("")}
-            <ul/>
+                <ul>
+                ${list.map((item) => `<li>${item}</li>`).join("")}
+                </ul>
             </div>
             `
             // STYLE
             var style = document.createElement("style");
             style.innerHTML =
             `
-            .root__list{
-                margin: 0px;
-                width: 100%;
-                height: 80vh;
-            }
             div{
+                margin: 0px auto;
+                height: 70vh;
                 background: #FF8282;
                 display: flex;
+                gap: 10px;
+                padding: 10px;
                 flex-direction: column;
                 align-self: center;
-                justify-content: center;
-                margin: 20px auto;
+                justify-content: flex-start;
             }
             `
-            this.shadow.appendChild(div);
+            // this.shadow.appendChild(div);
             this.shadow.appendChild(style);
     
         }
